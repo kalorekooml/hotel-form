@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Booking Form</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #74ebd5, #9face6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input, select, textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: red;
+    font-size: 13px;
+}
+
+.success {
+    color: green;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Responsive Layout */
+@media (min-width: 768px) {
+    .form-group {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .form-group label {
+        flex: 1;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        flex: 2;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Hotel Booking Form</h2>
+
+    <form id="bookingForm">
+
+        <div class="form-group">
+            <label for="checkin">Check-in Date *</label>
+            <input type="date" id="checkin" required>
+        </div>
+
+        <div class="form-group">
+            <label for="checkout">Check-out Date *</label>
+            <input type="date" id="checkout" required>
+        </div>
+
+        <div class="form-group">
+            <label for="roomType">
+                Room Type *
+                <span title="Single: 1 Guest | Double: 2 Guests | Suite: Up to 5 Guests"> ℹ️ </span>
+            </label>
+            <select id="roomType" required>
+                <option value="">Select Room</option>
+                <option value="single">Single</option>
+                <option value="double">Double</option>
+                <option value="suite">Suite</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="guests">Number of Guests *</label>
+            <input type="number" id="guests" min="1" max="5" required>
+        </div>
+
+        <div class="form-group">
+            <label for="requests">Special Requests</label>
+            <textarea id="requests" rows="3" placeholder="Optional notes..."></textarea>
+        </div>
+
+        <div class="error" id="errorMessage"></div>
+        <div class="success" id="successMessage"></div>
+
+        <button type="submit">Book Now</button>
+
+    </form>
+</div>
+
+<script>
+const checkin = document.getElementById("checkin");
+const checkout = document.getElementById("checkout");
+const roomType = document.getElementById("roomType");
+const guests = document.getElementById("guests");
+const form = document.getElementById("bookingForm");
+const errorMessage = document.getElementById("errorMessage");
+const successMessage = document.getElementById("successMessage");
+
+// Prevent past dates
+const today = new Date().toISOString().split("T")[0];
+checkin.min = today;
+
+// Update checkout min date when checkin changes
+checkin.addEventListener("change", function() {
+    checkout.min = checkin.value;
+});
+
+// Adjust max guests based on room type
+roomType.addEventListener("change", function() {
+    if (this.value === "single") {
+        guests.max = 1;
+    } else if (this.value === "double") {
+        guests.max = 2;
+    } else if (this.value === "suite") {
+        guests.max = 5;
+    }
+    guests.value = "";
+});
+
+// Form validation
+form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    errorMessage.textContent = "";
+    successMessage.textContent = "";
+
+    if (!checkin.value || !checkout.value || !roomType.value || !guests.value) {
+        errorMessage.textContent = "Please fill in all required fields.";
+        return;
+    }
+
+    if (checkout.value <= checkin.value) {
+        errorMessage.textContent = "Check-out date must be after check-in date.";
+        return;
+    }
+
+    if (parseInt(guests.value) > parseInt(guests.max)) {
+        errorMessage.textContent = "Guest count exceeds room capacity.";
+        return;
+    }
+
+    successMessage.textContent = "Booking submitted successfully!";
+    form.reset();
+});
+</script>
+
+</body>
+</html>
