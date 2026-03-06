@@ -1,0 +1,321 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Grand Villa — Reservations</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:'Jost',sans-serif;
+background:#f5f5f5;
+color:#222;
+}
+
+header{
+background:#111;
+color:white;
+padding:18px;
+text-align:center;
+font-family:'Playfair Display',serif;
+}
+
+header h1{
+margin:0;
+font-size:28px;
+}
+
+.hero{
+height:260px;
+background:url("https://images.unsplash.com/photo-1566073771259-6a8506099945") center/cover no-repeat;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:30px;
+text-align:center;
+padding:20px;
+font-family:'Playfair Display',serif;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
+.container h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+.rooms{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.room{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.room img{
+width:100%;
+height:170px;
+object-fit:cover;
+}
+
+.room-body{
+padding:15px;
+}
+
+.room h3{
+margin:0;
+font-family:'Playfair Display',serif;
+}
+
+.price{
+color:#666;
+margin-top:6px;
+}
+
+.form{
+background:white;
+margin-top:30px;
+padding:20px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.form h2{
+margin-top:0;
+text-align:center;
+}
+
+.form label{
+display:block;
+margin-top:15px;
+font-weight:500;
+}
+
+.form input,
+.form select{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+.summary{
+margin-top:20px;
+background:#fafafa;
+padding:15px;
+border-radius:8px;
+}
+
+.total{
+font-size:20px;
+font-weight:600;
+margin-top:10px;
+}
+
+button{
+margin-top:20px;
+padding:12px;
+width:100%;
+border:none;
+background:#111;
+color:white;
+font-size:16px;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#333;
+}
+
+footer{
+margin-top:40px;
+background:#111;
+color:#bbb;
+text-align:center;
+padding:15px;
+font-size:14px;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media(max-width:600px){
+
+.hero{
+height:200px;
+font-size:22px;
+}
+
+header h1{
+font-size:22px;
+}
+
+.room img{
+height:150px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>The Grand Villa</h1>
+<p>Luxury Hotel Reservations</p>
+</header>
+
+<div class="hero">
+Book Your Perfect Stay at The Grand Villa
+</div>
+
+<div class="container">
+
+<h2>Our Rooms</h2>
+
+<div class="rooms">
+
+<div class="room">
+<img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32">
+<div class="room-body">
+<h3>Deluxe Room</h3>
+<p class="price">₹4500 / night</p>
+</div>
+</div>
+
+<div class="room">
+<img src="https://images.unsplash.com/photo-1560448075-bb4caa6f9c2a">
+<div class="room-body">
+<h3>Executive Suite</h3>
+<p class="price">₹7500 / night</p>
+</div>
+</div>
+
+<div class="room">
+<img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa">
+<div class="room-body">
+<h3>Presidential Suite</h3>
+<p class="price">₹12000 / night</p>
+</div>
+</div>
+
+</div>
+
+<div class="form">
+
+<h2>Reservation Form</h2>
+
+<label>Choose Room</label>
+<select id="room">
+<option value="4500">Deluxe Room - ₹4500</option>
+<option value="7500">Executive Suite - ₹7500</option>
+<option value="12000">Presidential Suite - ₹12000</option>
+</select>
+
+<label>Check-in</label>
+<input type="date" id="checkin">
+
+<label>Check-out</label>
+<input type="date" id="checkout">
+
+<label>Guests</label>
+<select id="guests">
+<option>1 Guest</option>
+<option>2 Guests</option>
+<option>3 Guests</option>
+<option>4 Guests</option>
+</select>
+
+<div class="summary">
+<h3>Booking Summary</h3>
+<p id="nights">Nights: 0</p>
+<p class="total" id="total">Total: ₹0</p>
+</div>
+
+<button onclick="book()">Confirm Booking</button>
+
+</div>
+
+</div>
+
+<footer>
+© 2026 The Grand Villa
+</footer>
+
+<script>
+
+const room=document.getElementById("room");
+const checkin=document.getElementById("checkin");
+const checkout=document.getElementById("checkout");
+
+const nightsText=document.getElementById("nights");
+const totalText=document.getElementById("total");
+
+function calculate(){
+
+if(!checkin.value||!checkout.value) return;
+
+let inDate=new Date(checkin.value);
+let outDate=new Date(checkout.value);
+
+let diff=outDate-inDate;
+
+let nights=diff/(1000*60*60*24);
+
+if(nights<=0){
+nightsText.innerText="Nights: 0";
+totalText.innerText="Total: ₹0";
+return;
+}
+
+let price=room.value;
+let total=nights*price;
+
+nightsText.innerText="Nights: "+nights;
+totalText.innerText="Total: ₹"+total;
+
+}
+
+checkin.addEventListener("change",calculate);
+checkout.addEventListener("change",calculate);
+room.addEventListener("change",calculate);
+
+function book(){
+
+if(!checkin.value||!checkout.value){
+alert("Please select dates");
+return;
+}
+
+alert("Booking confirmed at The Grand Villa! Thank you.");
+
+}
+
+</script>
+
+</body>
+</html>
+```
